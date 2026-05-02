@@ -9,10 +9,10 @@ class Filmtar {
 
     public:
 
-    Filmtar();
+    Filmtar(size_t n);
     ~Filmtar();
 
-    void hozzaad(Film* f);
+    void hozzaad(Film f);
 
     void torol(String cim);
 

@@ -22,6 +22,12 @@ class Array {
     size_t size() const {
         return db;
     }
+
+
+    sizet_t kap() const {
+        return kapacitas;
+    }
+
     void resize(size_t newsize) {
         T* temp = new T[newsize];
 
@@ -52,6 +58,19 @@ class Array {
             resize(kapacitas * 2);
         }
         pData[db++] = inp;
+    }
+
+
+    void remove(T& inp) {
+        bool found = false;
+        for (size_t i = 0; i < db; ++i) {
+            if (found) {
+                pData[i - 1] = pData[i];
+            }
+            if (!found && pData[i] = inp) {
+                found = true;
+            }
+        }
     }
 
 };

@@ -3,6 +3,8 @@
 
 Film::Film(String s, int hossz, int ev) : cim(s), hossz(hossz), ev(ev), id(global_id++) {}
 
+Film::Film(Film& f) : cim(f.cim), hossz(f.hossz), ev(f.ev) {}
+
 String Film::getCim() const {return cim; }
 int Film::getEv() const {return ev; }
 

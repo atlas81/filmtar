@@ -13,6 +13,7 @@ class Film {
     public:
 
     Film(String s, int hossz, int ev);
+    Film(Film& f);
 
     String getCim() const;
     int getEv() const;
