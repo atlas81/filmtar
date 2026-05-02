@@ -5,16 +5,17 @@
 #include <iostream>
 
 class Film {
+    protected:
     String cim;
-    int hossz, ev, id;
+    int hossz, ev, id; 
+    static int global_id;
 
     public:
 
     Film(String s, int hossz, int ev);
-    ~Film();
 
-    String getCim();
-    int getEv();
+    String getCim() const;
+    int getEv() const;
 
     virtual void kiir(std::ostream& os = std::cout) const;
     virtual void mentes(const char* path) const;
