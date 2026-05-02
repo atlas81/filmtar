@@ -20,19 +20,21 @@ class String {
 
     size_t size() const;
 
-    const char* c_str();
+    const char* c_str() const;
 
     String& operator=(const String& rhs);
 
     char& operator[](size_t n);
 
-    String operator+(char c);
+    const char& operator[](size_t n) const;
 
-    String operator+(const String& rhs);
+    String& operator+(char c);
+
+    String& operator+(const String& rhs) const;
 
     bool operator ==(const String& rhs) const;
 
-    const bool operator<(const String& rhs) const;
+    bool operator<(const String& rhs) const;
 };
 
 #endif

@@ -6,11 +6,12 @@
 template <typename T>
 class Array {
     T* pData;
+    size_t db;
     size_t kapacitas;
 
     public:
 
-    Array(size_t kapacitas) : kapacitas(kapacitas) {
+    Array(size_t kapacitas) : db(0),kapacitas(kapacitas) {
         pData = new T[kapacitas];
     }
 
@@ -19,33 +20,38 @@ class Array {
     }
 
     size_t size() const {
-        return kapacitas;
+        return db;
     }
     void resize(size_t newsize) {
         T* temp = new T[newsize];
 
-        size_t cpy_lim = (newsize < kapacitas) ? newsize : kapacitas;
+        size_t cpy_lim = (newsize < db) ? newsize : db;
         for (size_t i = 0; i < cpy_lim; ++i) {
             temp[i] = pData[i];
         }
         delete[] pData;
         kapacitas = newsize;
         pData = temp;
+
+        if (db > kapacitas) db = kapacitas;
     }
 
     T& operator[](size_t n) {
-        if (n >= kapacitas || n < 0) throw "array:tulindexeles";
+        if (n >= db || n < 0) throw "array:tulindexeles";
         return pData[n];
     }
 
     const T& operator[](size_t n) const {
-        if (n >= kapacitas || n < 0) throw "array:tulindexeles";
+        if (n >= db || n < 0) throw "array:tulindexeles";
         return pData[n];
     }
 
 
-    void push_back(T) {
-
+    void push_back(T& inp) {
+        if (db + 1 >= kapacitas) {
+            resize(kapacitas * 2);
+        }
+        pData[db++] = inp;
     }
 
 };
