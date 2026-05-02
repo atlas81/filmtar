@@ -7,6 +7,7 @@ Film::Film(Film& f) : cim(f.cim), hossz(f.hossz), ev(f.ev) {}
 
 String Film::getCim() const {return cim; }
 int Film::getEv() const {return ev; }
+int Film::getHossz() const { return hossz; }
 
 
 void Film::kiir(std::ostream& os = std::cout) const {

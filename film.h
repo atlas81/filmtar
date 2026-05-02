@@ -17,6 +17,7 @@ class Film {
 
     String getCim() const;
     int getEv() const;
+    int getHossz() const;
 
     virtual void kiir(std::ostream& os = std::cout) const;
     virtual void mentes(const char* path) const;

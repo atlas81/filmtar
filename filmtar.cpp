@@ -1,4 +1,6 @@
 #include "filmtar.h"
+#include <iostream>
+#include <fstream>
 
 Filmtar::Filmtar(size_t n) : adatok(Array<Film*>(n)) {}
 
@@ -33,3 +35,13 @@ void Filmtar::listaz(std::ostream& os = std::cout) const {
 }
 
 
+void Filmtar::ment(const char* path) const {
+    std::ofstream save_file;
+    save_file.open(path, std::ios::app);
+
+    for (size_t i = 0; i < adatok.size(); ++i) {
+        save_file << adatok[i]->getCim().c_str() << ";" << adatok[i]->getEv() << ";" << adatok[i]->getHossz() << "|\n";
+    }
+
+    save_file.close();
+}
