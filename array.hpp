@@ -24,7 +24,7 @@ class Array {
     }
 
 
-    sizet_t kap() const {
+    size_t kap() const {
         return kapacitas;
     }
 
@@ -67,10 +67,11 @@ class Array {
             if (found) {
                 pData[i - 1] = pData[i];
             }
-            if (!found && pData[i] = inp) {
+            if (!found && (pData[i] == inp)) {
                 found = true;
             }
         }
+        --db;
     }
 
 };

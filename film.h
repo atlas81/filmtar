@@ -8,7 +8,6 @@ class Film {
     protected:
     String cim;
     int hossz, ev, id; 
-    static int global_id;
 
     public:
 
@@ -21,6 +20,7 @@ class Film {
 
     virtual void kiir(std::ostream& os = std::cout) const;
     virtual void mentes(const char* path) const;
+    virtual ~Film() {}
 };
 
 

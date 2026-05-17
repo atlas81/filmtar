@@ -28,9 +28,9 @@ class String {
 
     const char& operator[](size_t n) const;
 
-    String& operator+(char c);
+    String operator+(char c);
 
-    String& operator+(const String& rhs) const;
+    String operator+(const String& rhs) const;
 
     bool operator ==(const String& rhs) const;
 

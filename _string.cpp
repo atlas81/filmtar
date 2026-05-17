@@ -52,7 +52,7 @@ const char& String::operator[](size_t n) const {
 }
 
 
-String& String::operator+(char c) {
+String String::operator+(char c) {
     char temp[len + 2];
     strcpy(temp, pData);
     temp[len + 1] = c;
@@ -60,7 +60,7 @@ String& String::operator+(char c) {
     return ret;
 }
 
-String& String::operator+(const String& rhs) const{
+String String::operator+(const String& rhs) const{
     char temp[len + rhs.size() + 1];
     strcpy(temp, pData);
     strcat(temp, rhs.c_str());
@@ -81,6 +81,7 @@ bool String::operator<(const String& rhs) const {
     size_t cmp_lim = (len > rhs.size()) ? rhs.size() : len;
     for (size_t i = 0; i < cmp_lim; ++i) {
         if ((*this)[i] < rhs[i]) return true;
+        if ((*this)[i] > rhs[i]) return false;
     }
-    return false;
+    return len < rhs.size();
 }

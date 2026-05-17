@@ -12,7 +12,7 @@ class Filmtar {
     Filmtar(size_t n);
     ~Filmtar();
 
-    void hozzaad(Film f);
+    void hozzaad(Film* f);
 
     void torol(String cim);
 
@@ -27,6 +27,9 @@ class Filmtar {
     void ment(const char* path) const;
 
     void betolt(const char* path);
+
+    private:
+    void rendezSegito(int bal, int jobb, bool evSzerint);
 };
 
 #endif
