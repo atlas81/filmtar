@@ -28,6 +28,14 @@ Film* Filmtar::keres(String kulcsszo) const {
 }
 
 
+Film* Filmtar::keres(int ev) const {
+    for (size_t i = 0; i < adatok.size(); ++i) {
+        if (adatok[i]->getEv() == ev) return adatok[i];
+    }
+    return nullptr;
+}
+
+
 void Filmtar::listaz(std::ostream& os) const {
     for (size_t i = 0; i < adatok.size(); ++i) {
         adatok[i]->kiir();
@@ -56,10 +64,13 @@ void Filmtar::betolt(const char* path) {
     char sor[1024];
 
     while(save_file.getline(sor, sizeof(sor))) {
-        int elso_valaszto = -1, masodik_valaszto = -1, harmadik_valaszto = -1, pipe = -1;
+        if (sor[0] == '\0') continue;
         
-        // valasztok indexeinek keresese
-        for (int i = 0; sor[i] != '\0'; ++i) {
+        char tipus = sor[0];
+        
+        int elso_valaszto = -1, masodik_valaszto = -1, harmadik_valaszto = -1, negyedik_valaszto = -1, pipe = -1;
+        
+        for (int i = 1; sor[i] != '\0'; ++i) {
             if (sor[i] == ';') {
                 if (elso_valaszto == -1) {
                     elso_valaszto = i;
@@ -67,6 +78,8 @@ void Filmtar::betolt(const char* path) {
                     masodik_valaszto = i;
                 } else if (harmadik_valaszto == -1) {
                     harmadik_valaszto = i;
+                } else if (negyedik_valaszto == -1) {
+                    negyedik_valaszto = i;
                 }
             } else if (sor[i] == '|') {
                 pipe = i;
@@ -74,35 +87,21 @@ void Filmtar::betolt(const char* path) {
             }
         }
         
-        if (elso_valaszto == -1 || masodik_valaszto == -1 || pipe == -1) continue;
+        if (elso_valaszto == -1 || masodik_valaszto == -1 || harmadik_valaszto == -1 || pipe == -1) continue;
         
-        // cim 
         char cim_puffer[1024];
-        for (int i = 0; i < elso_valaszto; ++i) {
-            cim_puffer[i] = sor[i];
+        int cim_hossz = 0;
+        for (int i = elso_valaszto + 1; i < masodik_valaszto; ++i) {
+            cim_puffer[cim_hossz++] = sor[i];
         }
-        cim_puffer[elso_valaszto] = '\0';
+        cim_puffer[cim_hossz] = '\0';
         String cim(cim_puffer);
 
-        if(keres(cim) != nullptr) continue; // ha mar van ilyen nevu film a tarban, akkor skippeljuk
+        if(keres(cim) != nullptr) continue;
         
-        // ev 
-        char ev_puffer[256];
-        int ev_hossz = 0;
-        for (int i = elso_valaszto + 1; i < masodik_valaszto; ++i) {
-            ev_puffer[ev_hossz++] = sor[i];
-        }
-        ev_puffer[ev_hossz] = '\0';
-        
-        int ev = 0;
-        for (int i = 0; ev_puffer[i] != '\0'; ++i) {
-            ev = ev * 10 + (ev_puffer[i] - '0');
-        }
-        
-        // hossz 
         char hossz_puffer[256];
         int hossz_hossz = 0;
-        for (int i = masodik_valaszto + 1; i < (harmadik_valaszto != -1 ? harmadik_valaszto : pipe); ++i) {
+        for (int i = masodik_valaszto + 1; i < harmadik_valaszto; ++i) {
             hossz_puffer[hossz_hossz++] = sor[i];
         }
         hossz_puffer[hossz_hossz] = '\0';
@@ -112,45 +111,44 @@ void Filmtar::betolt(const char* path) {
             hossz = hossz * 10 + (hossz_puffer[i] - '0');
         }
         
-        // ha nincs 3. pontosvesszo akkor sima Film
-        if (harmadik_valaszto == -1) {
+        char ev_puffer[256];
+        int ev_hossz = 0;
+        int ev_vege = (negyedik_valaszto != -1) ? negyedik_valaszto : pipe;
+        for (int i = harmadik_valaszto + 1; i < ev_vege; ++i) {
+            ev_puffer[ev_hossz++] = sor[i];
+        }
+        ev_puffer[ev_hossz] = '\0';
+        
+        int ev = 0;
+        for (int i = 0; ev_puffer[i] != '\0'; ++i) {
+            ev = ev * 10 + (ev_puffer[i] - '0');
+        }
+        
+        if (tipus == 'T') {
             Film* f = new Film(cim, hossz, ev);
             hozzaad(f);
-            continue;
-        }
-
-        // negyedik mezo kiirasa
-        char negyedik_puffer[1024];
-        int negyedik_hossz = 0;
-        for (int i = harmadik_valaszto + 1; i < pipe; ++i) {
-            negyedik_puffer[negyedik_hossz++] = sor[i];
-        }
-        negyedik_puffer[negyedik_hossz] = '\0';
-        
-        // csak szamokbol all e?
-        bool csak_szamok_e = true;
-        if (negyedik_hossz == 0) {
-            csak_szamok_e = false;
-        } else {
-            for (int i = 0; negyedik_puffer[i] != '\0'; ++i) {
-                if (negyedik_puffer[i] < '0' || negyedik_puffer[i] > '9') {
-                    csak_szamok_e = false;
-                    break;
-                }
+        } else if (tipus == 'C') {
+            char korhatar_puffer[256];
+            int korhatar_hossz = 0;
+            for (int i = negyedik_valaszto + 1; i < pipe; ++i) {
+                korhatar_puffer[korhatar_hossz++] = sor[i];
             }
-        }
-        
-        if (csak_szamok_e) {
-            // CsaladiFilm
+            korhatar_puffer[korhatar_hossz] = '\0';
+            
             int korhatar = 0;
-            for (int i = 0; negyedik_puffer[i] != '\0'; ++i) {
-                korhatar = korhatar * 10 + (negyedik_puffer[i] - '0');
+            for (int i = 0; korhatar_puffer[i] != '\0'; ++i) {
+                korhatar = korhatar * 10 + (korhatar_puffer[i] - '0');
             }
             CsaladiFilm* f = new CsaladiFilm(cim, hossz, ev, korhatar);
             hozzaad(f);
-        } else {
-            // Dokumentumfilm
-            String leiras(negyedik_puffer);
+        } else if (tipus == 'D') {
+            char leiras_puffer[1024];
+            int leiras_hossz = 0;
+            for (int i = negyedik_valaszto + 1; i < pipe; ++i) {
+                leiras_puffer[leiras_hossz++] = sor[i];
+            }
+            leiras_puffer[leiras_hossz] = '\0';
+            String leiras(leiras_puffer);
             Dokumentumfilm* f = new Dokumentumfilm(cim, hossz, ev, leiras);
             hozzaad(f);
         }

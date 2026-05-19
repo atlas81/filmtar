@@ -7,7 +7,7 @@
 class Film {
     protected:
     String cim;
-    int hossz, ev, id; 
+    int hossz, ev; 
 
     public:
 
@@ -20,6 +20,8 @@ class Film {
 
     virtual void kiir(std::ostream& os = std::cout) const;
     virtual void mentes(const char* path) const;
+    virtual char getTipus() const;
+    virtual void modosit();
     virtual ~Film() {}
 };
 
@@ -32,6 +34,8 @@ class CsaladiFilm : public Film {
 
     void kiir(std::ostream& os = std::cout) const override;
     void mentes(const char* path) const override;
+    char getTipus() const override;
+    void modosit() override;
 };
 
 
@@ -43,6 +47,8 @@ class Dokumentumfilm : public Film {
     
     void kiir(std::ostream& os = std::cout) const override;
     void mentes(const char* path) const override;
+    char getTipus() const override;
+    void modosit() override;
 };
 
 #endif

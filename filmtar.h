@@ -5,9 +5,8 @@
 #include "array.hpp"
 
 class Filmtar {
-    Array<Film*> adatok;
-
     public:
+    Array<Film*> adatok;
 
     Filmtar(size_t n);
     ~Filmtar();
@@ -23,6 +22,8 @@ class Filmtar {
     int particional(int bal, int jobb, bool evSzerint);
 
     Film* keres(String kulcsszo) const;
+
+    Film* keres(int ev) const;
 
     void ment(const char* path) const;
 

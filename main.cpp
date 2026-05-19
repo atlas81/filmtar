@@ -26,19 +26,64 @@ void filmekListazasa(Filmtar& tar) {
     tar.listaz(std::cout);
 }
 
-void keresescim(Filmtar& tar) {
-    std::cout << "\n=== Kereses cim alapjan ===" << std::endl;
-    std::cout << "Kerem a keresett film cimet: ";
-    String keresettCim = szovegBeolvas();
+void kereses(Filmtar& tar) {
+    std::cout << "\n=== Kereses ===" << std::endl;
+    std::cout << "1. Kereses cim alapjan" << std::endl;
+    std::cout << "2. Kereses ev alapjan" << std::endl;
+    std::cout << "3. Kereses kategoria alapjan" << std::endl;
+    std::cout << "Valasztasa (1-3): ";
     
-    Film* talalt = tar.keres(keresettCim);
+    int keresModul = szamBeolvas();
     
-    if (talalt != nullptr) {
-        std::cout << "Megtalalt film:" << std::endl;
-        talalt->kiir(std::cout);
-        std::cout << std::endl;
+    if (keresModul == 1) {
+        std::cout << "Kerem a keresett film cimet: ";
+        String keresettCim = szovegBeolvas();
+        
+        Film* talalt = tar.keres(keresettCim);
+        
+        if (talalt != nullptr) {
+            std::cout << "Megtalalt film:" << std::endl;
+            talalt->kiir(std::cout);
+            std::cout << std::endl;
+        } else {
+            std::cout << "Film nem talalhato!" << std::endl;
+        }
+    } else if (keresModul == 2) {
+        std::cout << "Kerem az ev szamot: ";
+        int keresettEv = szamBeolvas();
+        
+        std::cout << "Keresett filmek:" << std::endl;
+        for (size_t i = 0; i < tar.adatok.size(); ++i) {
+            if (tar.adatok[i]->getEv() == keresettEv) {
+                tar.adatok[i]->kiir(std::cout);
+                std::cout << std::endl;
+                break;
+            }
+        }
+    } else if (keresModul == 3) {
+        std::cout << "1. Alap film" << std::endl;
+        std::cout << "2. Csaladi film" << std::endl;
+        std::cout << "3. Dokumentumfilm" << std::endl;
+        std::cout << "Valasztasa (1-3): ";
+        
+        int kateg = szamBeolvas();
+        char keresettTipus;
+        
+        if (kateg == 1) keresettTipus = 'T';
+        else if (kateg == 2) keresettTipus = 'C';
+        else if (kateg == 3) keresettTipus = 'D';
+        else return;
+        
+        std::cout << "Keresett filmek:" << std::endl;
+        for (size_t i = 0; i < tar.adatok.size(); ++i) {
+            if (tar.adatok[i]->getTipus() == keresettTipus) {
+                tar.adatok[i]->kiir(std::cout);
+                std::cout << std::endl;
+                break;
+            }
+        }
     } else {
-        std::cout << "Film nem talalhato!" << std::endl;
+        std::cout << "Hibas valasztas!" << std::endl;
     }
 }
 
@@ -114,6 +159,21 @@ void filmTorlese(Filmtar& tar) {
     }
 }
 
+void filmModositasa(Filmtar& tar) {
+    std::cout << "\n=== Film Modositasa ===" << std::endl;
+    std::cout << "Kerem a modositando film cimet: ";
+    String cim = szovegBeolvas();
+    
+    Film* talalt = tar.keres(cim);
+    
+    if (talalt != nullptr) {
+        talalt->modosit();
+        std::cout << "Film sikeresen modositva!" << std::endl;
+    } else {
+        std::cout << "Film nem talalhato!" << std::endl;
+    }
+}
+
 void filmekRendezese(Filmtar& tar) {
     std::cout << "\n=== Filmek Rendezese ===" << std::endl;
     std::cout << "Rendezesi mod:" << std::endl;
@@ -141,56 +201,53 @@ int main() {
         tar.betolt("filmek.txt");
         std::cout << "Adatok betoltve a filmek.txt fajlbol." << std::endl;
     } catch (const char* e) {
-        std::cout << "Az adatfajl nem letezik vagy az olvasas sikertelen. Ures adatbazissal indulunk." << std::endl;
+        std::cout << "Az adatfajl nem letezes vagy olvasas sikertelen. Ures adatbazissal indulunk." << std::endl;
     }
     
     int valasztas = 0;
     
-    while (valasztas != 7) {
+    while (valasztas != 8) {
         std::cout << "\n====== FILMTAR NYILVANTARTO RENDSZER ======" << std::endl;
         std::cout << "1. Filmek listazasa" << std::endl;
-        std::cout << "2. Kereses cim alapjan" << std::endl;
+        std::cout << "2. Kereses" << std::endl;
         std::cout << "3. Uj film hozzaadasa" << std::endl;
         std::cout << "4. Film torlese" << std::endl;
-        std::cout << "5. Filmek rendezese" << std::endl;
-        std::cout << "6. Adatok mentese" << std::endl;
-        std::cout << "7. Kilepes" << std::endl;
-        std::cout << "Valasztasa (1-7): ";
+        std::cout << "5. Film modositasa" << std::endl;
+        std::cout << "6. Filmek rendezese" << std::endl;
+        std::cout << "7. Adatok mentese" << std::endl;
+        std::cout << "8. Kilepes" << std::endl;
+        std::cout << "Valasztasa (1-8): ";
         
         valasztas = szamBeolvas();
         
         switch (valasztas) {
             case 1:
-                for (int i = 0; i < 100; ++i) std::cout << '\n';
                 filmekListazasa(tar);
                 break;
             case 2:
-                for (int i = 0; i < 100; ++i) std::cout << '\n';
-                keresescim(tar);
+                kereses(tar);
                 break;
             case 3:
-                for (int i = 0; i < 100; ++i) std::cout << '\n';
                 ujFilmHozzaadasa(tar);
                 break;
             case 4:
-                for (int i = 0; i < 100; ++i) std::cout << '\n';
                 filmTorlese(tar);
                 break;
             case 5:
-                for (int i = 0; i < 100; ++i) std::cout << '\n';
-                filmekRendezese(tar);
+                filmModositasa(tar);
                 break;
             case 6:
-                for (int i = 0; i < 100; ++i) std::cout << '\n';
-                tar.ment("filmek.txt");
-                std::cout << "Adatok elmentve." << std::endl;
+                filmekRendezese(tar);
                 break;
             case 7:
+                tar.ment("filmek.txt");
+                std::cout << "Adatok elmentve!" << std::endl;
                 break;
-
-            
+            case 8:
+                std::cout << "Viszlat!" << std::endl;
+                break;
             default:
-                std::cout << "Hibas valasztas! Kerem valasszon 1-6 kozul." << std::endl;
+                std::cout << "Hibas valasztas! Kerem valasszon 1-8 kozul." << std::endl;
         }
     }
     
