@@ -216,7 +216,7 @@ void filmekRendezese(Filmtar& tar) {
 }
 
 // fő menu
-#ifdef RUN_MAIN
+#ifndef CPORTA
 int main() {
     Filmtar tar(100);
     

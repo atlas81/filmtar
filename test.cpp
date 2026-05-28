@@ -578,6 +578,7 @@ void perem_hosszu_cim() {
 
 // A tesztfuttato main csak akkor legyen benne, ha kifejezetten teszteket fordítunk.
 
+#ifdef CPORTA
 int main() {
     std::cout << "========== TESZTEK INDITASA ==========" << std::endl << std::endl;
     
@@ -666,3 +667,4 @@ int main() {
     
     return sikertelen_tesztek == 0 ? 0 : 1;
 }
+#endif
