@@ -1,5 +1,7 @@
 #include "_string.h"
 #include <cstring>
+#include "memtrace.h"
+
 
 String::String() : pData(nullptr), len(0) {}
 
@@ -53,18 +55,21 @@ const char& String::operator[](size_t n) const {
 
 
 String String::operator+(char c) {
-    char temp[len + 2];
+    char* temp = new char[len + 2];
     strcpy(temp, pData);
-    temp[len + 1] = c;
+    temp[len] = c;
+    temp[len + 1] = '\0';
     String ret(temp);
+    delete[] temp;
     return ret;
 }
 
 String String::operator+(const String& rhs) const{
-    char temp[len + rhs.size() + 1];
+    char* temp = new char[len + rhs.size() + 1];
     strcpy(temp, pData);
     strcat(temp, rhs.c_str());
     String ret(temp);
+    delete[] temp;
     return ret;
 }
 

@@ -3,29 +3,43 @@
 #include "_string.h"
 #include "film.h"
 #include <iostream>
+#include "memtrace.h"
 
+// g++ -Wall -Werror -Wpedantic -std=c++11 -DMEMTRACE _string.cpp main.cpp film.cpp filmtar.cpp memtrace.cpp -o outp
+
+// szám beolvasás ellenőrzéssel
 int szamBeolvas() {
     int ertek;
-    while (!(std::cin >> ertek)) {
+    while (true) {
+        if (std::cin >> ertek) {
+            std::cin.ignore(1024, '\n');
+            return ertek;
+        }
+
+        if (std::cin.eof()) {
+            return 8;
+        }
+
         std::cin.clear();
         std::cin.ignore(1024, '\n');
         std::cout << "Hibas bemenet! Kerem adjon meg egy szamot: ";
     }
-    std::cin.ignore(1024, '\n');
-    return ertek;
 }
 
+// szöveg beolvasás (sor)
 String szovegBeolvas() {
     char puffer[1024];
     std::cin.getline(puffer, sizeof(puffer));
     return String(puffer);
 }
 
+// összes film listázása
 void filmekListazasa(Filmtar& tar) {
     std::cout << "\n=== Filmek Listazasa ===" << std::endl;
     tar.listaz(std::cout);
 }
 
+// keresés: cím, év vagy kategória alapján
 void kereses(Filmtar& tar) {
     std::cout << "\n=== Kereses ===" << std::endl;
     std::cout << "1. Kereses cim alapjan" << std::endl;
@@ -51,15 +65,17 @@ void kereses(Filmtar& tar) {
     } else if (keresModul == 2) {
         std::cout << "Kerem az ev szamot: ";
         int keresettEv = szamBeolvas();
+
+        Film* talalt = tar.keres(keresettEv);
         
-        std::cout << "Keresett filmek:" << std::endl;
-        for (size_t i = 0; i < tar.adatok.size(); ++i) {
-            if (tar.adatok[i]->getEv() == keresettEv) {
-                tar.adatok[i]->kiir(std::cout);
-                std::cout << std::endl;
-                break;
-            }
+        if (talalt != nullptr) {
+            std::cout << "Megtalalt film:" << std::endl;
+            talalt->kiir(std::cout);
+            std::cout << std::endl;
+        } else {
+            std::cout << "Film nem talalhato!" << std::endl;
         }
+
     } else if (keresModul == 3) {
         std::cout << "1. Alap film" << std::endl;
         std::cout << "2. Csaladi film" << std::endl;
@@ -74,19 +90,21 @@ void kereses(Filmtar& tar) {
         else if (kateg == 3) keresettTipus = 'D';
         else return;
         
-        std::cout << "Keresett filmek:" << std::endl;
-        for (size_t i = 0; i < tar.adatok.size(); ++i) {
-            if (tar.adatok[i]->getTipus() == keresettTipus) {
-                tar.adatok[i]->kiir(std::cout);
-                std::cout << std::endl;
-                break;
-            }
+        Film* talalt = tar.keres(keresettTipus);
+        
+        if (talalt != nullptr) {
+            std::cout << "Megtalalt film:" << std::endl;
+            talalt->kiir(std::cout);
+            std::cout << std::endl;
+        } else {
+            std::cout << "Film nem talalhato!" << std::endl;
         }
     } else {
         std::cout << "Hibas valasztas!" << std::endl;
     }
 }
 
+// új film hozzáadása (típússsal)
 void ujFilmHozzaadasa(Filmtar& tar) {
     std::cout << "\n=== Uj Film Hozzaadasa ===" << std::endl;
     std::cout << "Valasszon film tipust:" << std::endl;
@@ -144,6 +162,7 @@ void ujFilmHozzaadasa(Filmtar& tar) {
     }
 }
 
+// film törlése
 void filmTorlese(Filmtar& tar) {
     std::cout << "\n=== Film Torlese ===" << std::endl;
     std::cout << "Kerem a torlendo film cimet: ";
@@ -159,6 +178,7 @@ void filmTorlese(Filmtar& tar) {
     }
 }
 
+// film módosítása
 void filmModositasa(Filmtar& tar) {
     std::cout << "\n=== Film Modositasa ===" << std::endl;
     std::cout << "Kerem a modositando film cimet: ";
@@ -174,6 +194,7 @@ void filmModositasa(Filmtar& tar) {
     }
 }
 
+// filmek rendezése (év vagy cím szerint)
 void filmekRendezese(Filmtar& tar) {
     std::cout << "\n=== Filmek Rendezese ===" << std::endl;
     std::cout << "Rendezesi mod:" << std::endl;
@@ -194,20 +215,22 @@ void filmekRendezese(Filmtar& tar) {
     }
 }
 
+// fő menu
+#ifdef RUN_MAIN
 int main() {
     Filmtar tar(100);
     
     try {
         tar.betolt("filmek.txt");
         std::cout << "Adatok betoltve a filmek.txt fajlbol." << std::endl;
-    } catch (const char* e) {
-        std::cout << "Az adatfajl nem letezes vagy olvasas sikertelen. Ures adatbazissal indulunk." << std::endl;
+    } catch (const std::runtime_error& e) {
+        std::cout << "Az filmek.txt fajl nem letezik vagy olvasasa sikertelen. Ures adatbazissal indulunk." << std::endl;
     }
     
     int valasztas = 0;
     
     while (valasztas != 8) {
-        std::cout << "\n====== FILMTAR NYILVANTARTO RENDSZER ======" << std::endl;
+        std::cout << "\n====== FILMTAR ======" << std::endl;
         std::cout << "1. Filmek listazasa" << std::endl;
         std::cout << "2. Kereses" << std::endl;
         std::cout << "3. Uj film hozzaadasa" << std::endl;
@@ -244,7 +267,6 @@ int main() {
                 std::cout << "Adatok elmentve!" << std::endl;
                 break;
             case 8:
-                std::cout << "Viszlat!" << std::endl;
                 break;
             default:
                 std::cout << "Hibas valasztas! Kerem valasszon 1-8 kozul." << std::endl;
@@ -253,3 +275,4 @@ int main() {
     
     return 0;
 }
+#endif

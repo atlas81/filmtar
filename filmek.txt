@@ -1,5 +1,5 @@
-C;Elden Ring;10000;2022;16|
-T;Gyuruk ura;180;2000|
-D;Haziallatok;30;2015;Cica|
-T;Star Wars : A New Hope;120;1977|
-C;Verdak 2;120;2010;6|
+T;Star Wars: Episode IV - A New Hope;121;1977|
+T;The Lord of the Rings: The Fellowship of the Ring;178;2001|
+T;Karib Tenger Kalozai 1;143;2003|
+C;Verdak 2;106;2011;6|
+D;Haziallatok;30;2015;Cicak|

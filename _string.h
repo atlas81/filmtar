@@ -2,6 +2,8 @@
 #define STRING_H
 
 #include <cstddef>
+#include "memtrace.h"
+
 
 class String {
     char* pData;

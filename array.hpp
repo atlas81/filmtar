@@ -2,6 +2,8 @@
 #define ARRAY_HPP
 
 #include <cstddef>
+#include "memtrace.h"
+
 
 template <typename T>
 class Array {

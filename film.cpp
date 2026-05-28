@@ -1,5 +1,7 @@
 #include "film.h"
 #include <fstream>
+#include "memtrace.h"
+
 
 
 Film::Film(String s, int hossz, int ev) : cim(s), hossz(hossz), ev(ev) {}

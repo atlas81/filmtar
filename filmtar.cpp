@@ -1,25 +1,38 @@
 #include "filmtar.h"
 #include <iostream>
 #include <fstream>
+#include <stdexcept>
 #include "_string.h"
+#include "memtrace.h"
 
+// Konstruktor: tár létrehozása
 Filmtar::Filmtar(size_t n) : adatok(Array<Film*>(n)) {}
 
-Filmtar::~Filmtar() {}
+// Destruktor: minden Film*-t felszabadít
+Filmtar::~Filmtar() {
+    for (size_t i = 0; i < adatok.size(); ++i) {
+        delete adatok[i];
+    }
+}
 
 
+// Film hozzáadása a tárhoz
 void Filmtar::hozzaad(Film* f) {
     adatok.push_back(f);
 }
 
 
+// Film törlése és felszabadítása
 void Filmtar::torol(String cim) {
     Film* torlendo = keres(cim);
-    adatok.remove(torlendo);
-    delete torlendo;
+    if (torlendo != nullptr) {
+        adatok.remove(torlendo);
+        delete torlendo;
+    }
 }
 
 
+// Film keresése cím alapján (az első találatot adja vissza)
 Film* Filmtar::keres(String kulcsszo) const {
     for (size_t i = 0; i < adatok.size(); ++i) {
         if (adatok[i]->getCim() == kulcsszo) return adatok[i];
@@ -28,9 +41,18 @@ Film* Filmtar::keres(String kulcsszo) const {
 }
 
 
+// Film keresése év alapján (az első találatot adja vissza)
 Film* Filmtar::keres(int ev) const {
     for (size_t i = 0; i < adatok.size(); ++i) {
         if (adatok[i]->getEv() == ev) return adatok[i];
+    }
+    return nullptr;
+}
+
+
+Film* Filmtar::keres(char c) const {
+    for (size_t i = 0; i < adatok.size(); ++i) {
+        if (adatok[i]->getTipus() == c) return adatok[i];
     }
     return nullptr;
 }
@@ -59,7 +81,7 @@ void Filmtar::betolt(const char* path) {
     std::ifstream save_file;
     save_file.open(path, std::ios::in);
 
-    if (!save_file.is_open()) throw "Filmtar::betolt fajl nincs megnyitva";
+    if (!save_file.is_open()) throw std::runtime_error("Filmtar::betolt: fajl nem nyithato");
 
     char sor[1024];
 
