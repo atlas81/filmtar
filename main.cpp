@@ -48,17 +48,21 @@ void kereses(Filmtar& tar) {
     std::cout << "Valasztasa (1-3): ";
     
     int keresModul = szamBeolvas();
+
+    Array<int> talalatok(1);
     
     if (keresModul == 1) {
         std::cout << "Kerem a keresett film cimet: ";
         String keresettCim = szovegBeolvas();
         
-        Film* talalt = tar.keres(keresettCim);
+        Film* talalt = tar.keres(keresettCim, talalatok);
         
         if (talalt != nullptr) {
-            std::cout << "Megtalalt film:" << std::endl;
-            talalt->kiir(std::cout);
-            std::cout << std::endl;
+            std::cout << "Megtalalt filmek:" << std::endl;
+            for (size_t i = 0; i < talalatok.size(); ++i) {
+                tar[talalatok[i]]->kiir(std::cout);
+                std::cout << std::endl;
+            }
         } else {
             std::cout << "Film nem talalhato!" << std::endl;
         }
@@ -66,12 +70,14 @@ void kereses(Filmtar& tar) {
         std::cout << "Kerem az ev szamot: ";
         int keresettEv = szamBeolvas();
 
-        Film* talalt = tar.keres(keresettEv);
+        Film* talalt = tar.keres(keresettEv, talalatok);
         
         if (talalt != nullptr) {
-            std::cout << "Megtalalt film:" << std::endl;
-            talalt->kiir(std::cout);
-            std::cout << std::endl;
+            std::cout << "Megtalalt filmek:" << std::endl;
+            for (size_t i = 0; i < talalatok.size(); ++i) {
+                tar[talalatok[i]]->kiir(std::cout);
+                std::cout << std::endl;
+            }
         } else {
             std::cout << "Film nem talalhato!" << std::endl;
         }
@@ -90,12 +96,14 @@ void kereses(Filmtar& tar) {
         else if (kateg == 3) keresettTipus = 'D';
         else return;
         
-        Film* talalt = tar.keres(keresettTipus);
+        Film* talalt = tar.keres(keresettTipus, talalatok);
         
         if (talalt != nullptr) {
-            std::cout << "Megtalalt film:" << std::endl;
-            talalt->kiir(std::cout);
-            std::cout << std::endl;
+            std::cout << "Megtalalt filmek:" << std::endl;
+            for (size_t i = 0; i < talalatok.size(); ++i) {
+                tar[talalatok[i]]->kiir(std::cout);
+                std::cout << std::endl;
+            }
         } else {
             std::cout << "Film nem talalhato!" << std::endl;
         }

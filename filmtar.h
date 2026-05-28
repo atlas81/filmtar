@@ -9,6 +9,7 @@
 class Filmtar {
     private:
     Array<Film*> adatok;
+    Array<int> indexek; // az adatok rendezett indexei 
     void rendezSegito(int bal, int jobb, bool evSzerint);
 
     public:
@@ -25,11 +26,13 @@ class Filmtar {
 
     int particional(int bal, int jobb, bool evSzerint);  // Quicksort partíció
 
-    Film* keres(String kulcsszo) const;  // Keresés cím alapján
+    Film* keres(String kulcsszo) const; // csak 1-et ad vissza, letezes vizsgalatra hasznalando
 
-    Film* keres(int ev) const;  // Keresés év alapján
+    Film* keres(String kulcsszo, Array<int> &talalatok) const;  // Keresés cím alapján (osszes talalat)
 
-    Film* keres(char c) const;
+    Film* keres(int ev, Array<int> &talalatok) const;  // Keresés év alapján (osszes talalat)
+
+    Film* keres(char c, Array<int> &talalatok) const; // Kereses tipus alapjan (osszes talalat)
 
     void ment(const char* path) const;  // Mentés fájlba
 

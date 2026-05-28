@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include "memtrace.h"
+#include <exception>
 
 
 template <typename T>
@@ -45,12 +46,12 @@ class Array {
     }
 
     T& operator[](size_t n) {
-        if (n >= db || n < 0) throw "array:tulindexeles";
+        if (n >= db || n < 0) throw std::out_of_range("array:tulindexeles");
         return pData[n];
     }
 
     const T& operator[](size_t n) const {
-        if (n >= db || n < 0) throw "array:tulindexeles";
+        if (n >= db || n < 0) throw std::out_of_range("array:tulindexeles");
         return pData[n];
     }
 
@@ -70,6 +71,19 @@ class Array {
                 pData[i - 1] = pData[i];
             }
             if (!found && (pData[i] == inp)) {
+                found = true;
+            }
+        }
+        --db;
+    }
+    // a megadott indexu elemet torli a tombbol
+    void remove_at(size_t idx) { 
+        bool found = false;
+        for (size_t i = 0; i < db; ++i) {
+            if (found) {
+                pData[i - 1] = pData[i];
+            }
+            if (!found && (i == idx)) {
                 found = true;
             }
         }
