@@ -3,3 +3,6 @@ T;The Lord of the Rings: The Fellowship of the Ring;178;2001|
 T;Karib Tenger Kalozai 1;143;2003|
 C;Verdak 2;106;2011;6|
 D;Haziallatok;30;2015;Cicak|
+T;Ugyanaz az ev;30;1977|
+C;Ugyanaz a tipus;106;2011;6|
+

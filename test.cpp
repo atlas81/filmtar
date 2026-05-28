@@ -204,7 +204,8 @@ void filmtar_keres_cim() {
 void filmtar_keres_ev() {
     Filmtar tar(10);
     tar.hozzaad(new Film(String("Inception"), 148, 2010));
-    Film* talalt = tar.keres(2010);
+    Array<int> talalat(1);
+    Film* talalt = tar.keres(2010, talalat);
     teszt_eredmeny("Filmtar_keres_ev",
         talalt != nullptr &&
         talalt->getEv() == 2010);
@@ -219,8 +220,9 @@ void filmtar_keres_nem_talalt_cim() {
 
 void filmtar_keres_nem_talalt_ev() {
     Filmtar tar(10);
+    Array<int> talalat(1);
     tar.hozzaad(new Film(String("Test"), 100, 2000));
-    Film* nemTalalt = tar.keres(1900);
+    Film* nemTalalt = tar.keres(1900, talalat);
     teszt_eredmeny("Filmtar_keres_nem_talalt_ev", nemTalalt == nullptr);
 }
 
@@ -246,9 +248,9 @@ void filmtar_rendez_ev() {
     tar.rendez(true);
     
     teszt_eredmeny("Filmtar_rendez_ev",
-        tar[0]->getEv() == 1999 &&
-        tar[1]->getEv() == 2000 &&
-        tar[2]->getEv() == 2001);
+        tar[tar.at_idx(0)]->getEv() == 1999 &&
+        tar[tar.at_idx(1)]->getEv() == 2000 &&
+        tar[tar.at_idx(2)]->getEv() == 2001);
 }
 
 void filmtar_rendez_cim() {
@@ -260,9 +262,9 @@ void filmtar_rendez_cim() {
     tar.rendez(false);
     
     teszt_eredmeny("Filmtar_rendez_cim",
-        tar[0]->getCim() == String("Apple") &&
-        tar[1]->getCim() == String("Monkey") &&
-        tar[2]->getCim() == String("Zebra"));
+        tar[tar.at_idx(0)]->getCim() == String("Apple") &&
+        tar[tar.at_idx(1)]->getCim() == String("Monkey") &&
+        tar[tar.at_idx(2)]->getCim() == String("Zebra"));
 }
 
 void filmtar_rendez_ures() {
@@ -283,7 +285,7 @@ void filmtar_rendez_ketto() {
     tar.hozzaad(new Film(String("Z"), 100, 2000));
     tar.hozzaad(new Film(String("A"), 100, 1999));
     tar.rendez(false);
-    teszt_eredmeny("Filmtar_rendez_ketto", tar[0]->getCim() == String("A"));
+    teszt_eredmeny("Filmtar_rendez_ketto", tar[tar.at_idx(0)]->getCim() == String("A"));
 }
 
 void filmtar_kevert_tipusok() {
@@ -306,7 +308,7 @@ void filmtar_kevert_rendez() {
     tar.hozzaad(new Dokumentumfilm(String("C"), 50, 2001, String("d")));
     
     tar.rendez(true);
-    teszt_eredmeny("Filmtar_kevert_rendez", tar[0]->getEv() == 1999);
+    teszt_eredmeny("Filmtar_kevert_rendez", tar[tar.at_idx(0)]->getEv() == 1999);
 }
 
 void filmtar_listaz() {

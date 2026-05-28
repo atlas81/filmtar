@@ -28,6 +28,10 @@ class Filmtar {
 
     Film* keres(String kulcsszo) const; // csak 1-et ad vissza, letezes vizsgalatra hasznalando
 
+    Film* keres(int ev) const; // csak 1-et ad vissza, letezes vizsgalatra hasznalando
+
+    Film* keres(char tipus) const; // csak 1-et ad vissza, letezes vizsgalatra hasznalando
+
     Film* keres(String kulcsszo, Array<int> &talalatok) const;  // Keresés cím alapján (osszes talalat)
 
     Film* keres(int ev, Array<int> &talalatok) const;  // Keresés év alapján (osszes talalat)
@@ -37,6 +41,10 @@ class Filmtar {
     void ment(const char* path) const;  // Mentés fájlba
 
     void betolt(const char* path);  // Betöltés fájlból
+
+    int at_idx(size_t i) {
+        return indexek[i];
+    }
 
     Film* operator[](size_t i) {
         return adatok[i];

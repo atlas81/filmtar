@@ -51,6 +51,22 @@ Film* Filmtar::keres(String kulcsszo) const {
     return nullptr;
 }
 
+// Film keresése ev alapján (az első találatot adja vissza)
+Film* Filmtar::keres(int ev) const {
+    for (size_t i = 0; i < adatok.size(); ++i) {
+        if (adatok[i]->getEv() == ev) return adatok[i];
+    }
+    return nullptr;
+}
+
+// Film keresése tipus alapján (az első találatot adja vissza)
+Film* Filmtar::keres(char tipus) const {
+    for (size_t i = 0; i < adatok.size(); ++i) {
+        if (adatok[i]->getTipus() == tipus) return adatok[i];
+    }
+    return nullptr;
+}
+
 Film* Filmtar::keres(String kulcsszo, Array<int> &talalatok) const {
     int found_idx;
     for (size_t i = 0; i < adatok.size(); ++i) {
